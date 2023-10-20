@@ -1,0 +1,17 @@
+[
+    {
+        "name": "Abacjusz",
+        "money": 200,
+        "equipment": "dagger"
+    },
+    {
+        "name": "Barjusz",
+        "money": 400,
+        "equipment": "candle"
+    },
+    {
+        "name": "Dereniusz",
+        "money": 500,
+        "equipment": "aplle"
+    }
+]

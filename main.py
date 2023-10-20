@@ -1,4 +1,5 @@
 import random
+import json
 
 
 class Player:
@@ -24,45 +25,61 @@ class Room:
         merchant_chance,
         treasure_chance,
         nothing_chance,
+        aviable_monster=list(),
     ):
         self.room_number = room_number
         self.chance_to_meet_monster = monster_chance
         self.chance_to_meet_merchant = merchant_chance
         self.chance_to_meet_tresure = treasure_chance
         self.chance_to_meet_nothing = nothing_chance
+        self.aviable_monster = aviable_monster
         self.next_rooms = []
         self.room_decsrition = ""
 
     def __str__(self):
         return f" chamber : {self.room_number} "
 
-    def enter(self):
-        print(f"{self.description}     \n  rooms allowed")
-
-        #        for room in self.next_rooms:
-        #            print(f"{room}")
+    def show_allowed_rooms(self):
+        print("next allowed rooms")
         for count, room in enumerate(self.next_rooms, start=1):
             print(count, room)
+
+    def enter(self):
+        print(f"{self.description}     \n  ############")
+        #       if len(self.aviable_monster) > 0:
+        #       if len(self.aviable_monster):
+        if self.aviable_monster:
+            print(f"you find monster : {self.aviable_monster}     \n  $$$$$$$$$$")
+        #        for room in self.next_rooms:
+        #            print(f"{room}")
+        self.show_allowed_rooms()
 
         while True:
             try:
                 place = int(input(" give the number of the chamber you want to go to "))
-                if 0 < place <= len(self.next_rooms):
+                if place <= len(self.next_rooms) and place > 0:
                     break
                 else:
                     print("wrong room")
+
+                    self.show_allowed_rooms()
             except ValueError:
                 print("This is not the correct chamber number. Try again")
-
+                self.show_allowed_rooms()
         self.next_rooms[place - 1].enter()
 
 
 class Weapon:
-    def __init__(self, power, name, base_price, rarity):
-        self.powar = power
+    def __init__(self, name, power, base_price, rarity):
         self.name = name
+        self.power = power
         self.base_price = base_price
         self.rarity = rarity
+
+    def __repr__(self):
+        return f"weapon name: {self.name} power : {self.power}"
+
+        # return f"{self.name=}"
 
 
 class Merchant:
@@ -73,11 +90,15 @@ class Merchant:
 
 
 class Monster:
-    def __init__(self, name, health, money):
+    def __init__(self, name, health, power, money, equipment=list()):
         self.name = name
         self.health = health
+        self.power = power
         self.money = money
-        self.equipment = []
+        self.equipment = equipment
+
+    def __repr__(self):
+        return f"monster name: {self.name} health : {self.health} power: {self.power}, money :{self.money}:equipment : {self.equipment} "
 
 
 def main():
@@ -87,13 +108,19 @@ def main():
         money=random.randint(1, 10),
         wisdom=random.randint(1, 10),
     )
-
+    weapon = Weapon("fist", 5, 5, 1)
+    player.equipment.append(weapon)
     print(player)
+    print(weapon)
     rooms = []
+    comb_weapon = Weapon("comb", 0, 0, 1)
+
+    monster_mati = Monster("Mati", 10, 5, 100000000, [comb_weapon])
+    print(monster_mati)
 
     rooms.append(Room("A1", 0.10, 0, 0, 1))
     rooms[-1].description = "your trip begin ! young travelers"
-    rooms.append(Room("B1", 0.50, 0, 0, 1))
+    rooms.append(Room("B1", 0.50, 0, 0, 1, [monster_mati]))
     rooms[-1].description = "room with fireplace"
     rooms.append(Room("B2", 0.50, 0, 0, 1))
     rooms[-1].description = "ugly room with chupacabra or not"
@@ -142,6 +169,19 @@ def main():
     rooms[11].next_rooms = [rooms[12]]
 
     rooms[12].next_rooms = []
+
+    plik = open("monter.json")
+    list_of_monsters = json.load(plik)
+    print(f"monster list  : {list_of_monsters}")
+    plik.close()
+
+    plik = open("merchant.json")
+    list_of_merchant = json.load(plik)
+    print(f"merchant list  : {list_of_merchant}")
+    plik.close()
+    print("*******************")
+    print(random.choice(list_of_monsters))
+    print(random.choice(list_of_merchant))
     rooms[0].enter()
 
 

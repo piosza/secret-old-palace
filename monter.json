@@ -1,0 +1,30 @@
+[
+    {
+        "name": "Aban",
+        "health": 11,
+        "power": 5,
+        "money": 2,
+        "equipment": "dagger"
+    },
+    {
+        "name": "Bubu",
+        "health": 3,
+        "power": 2,
+        "money": 1,
+        "equipment": "axe"
+    },
+    {
+        "name": "Candyman",
+        "health": 5,
+        "power": 2,
+        "money": 10,
+        "equipment": "Old Candy"
+    },
+    {
+        "name": "Dudi",
+        "health": 3,
+        "power": 2,
+        "money": 100,
+        "equipment": "Old wine"
+    }
+]
