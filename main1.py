@@ -22,9 +22,13 @@ class Player:
         return max(self.equipment, key=lambda item: item.power)
 
     def fight(self, monster):
-        fighting_weapon = self.get_best_item()
-        print(f"{self.name}   you are fighting with   {fighting_weapon}")
+        who_is_atacking = self
+        who_is_defending = monster
+
         while self.health > 0 and monster.health > 0:
+            fighting_weapon = who_is_atacking.get_best_item()
+            print(f"{who_is_atacking.name}   you are fighting with   {fighting_weapon}")
+            print(f" your turn {who_is_atacking.name} ")
             print(f" {self.name } your helth {self.health} ")
             print(f" {monster.name } your enemy helth {monster.health} ")
             random_extra_power = random.randint(-5, 5)
@@ -32,11 +36,38 @@ class Player:
             print(
                 f"{self.name } you hit used {fighting_weapon.name} with power {fighting_weapon.power} with extra power {random_extra_power} sum of your attack {sum_of_power}"
             )
-            monster.health -= sum_of_power
-            print(f"{monster.name} after attack have {monster.health}")
-            time.sleep(2)
+            who_is_defending.health -= sum_of_power
+            print(
+                f"{who_is_defending.name} after attack have {who_is_defending.health}"
+            )
+            #            time.sleep(2)
+            input()
+            if who_is_atacking == monster:
+                who_is_atacking = self
+            elif who_is_atacking == self:
+                who_is_atacking = monster
+            if who_is_defending == monster:
+                who_is_defending = self
+            elif who_is_defending == self:
+                who_is_defending = monster
+
+            #            print(f" your turn {who_is_atacking.monster.name} ")
+            def death_of_monster():
+                list_death_of_monster = [
+                    "is dead and you can eat them",
+                    "monster die",
+                    "end of then",
+                    "slashed",
+                ]
+
+                drawn_message = random.choice(list_death_of_monster)
+
+                return drawn_message
+
+            drawn_message_death = death_of_monster()
+
             if monster.health < 0:
-                print(f"{monster.name } is dead and you can eat them ")
+                print(f"{monster.name }: {drawn_message_death} ")
             else:
                 print(f"{monster.name } still alive ")
 
@@ -142,6 +173,10 @@ class Monster:
         self.money = money
         self.equipment = equipment
 
+    def get_best_item(self):
+        #        return sorted(self.equipment, key=lambda item: item.power, reverse=True)[0]
+        return max(self.equipment, key=lambda item: item.power)
+
     def __repr__(self):
         return f"monster name: {self.name} health : {self.health} power: {self.power}, money :{self.money}:equipment : {self.equipment} "
 
@@ -171,7 +206,23 @@ def main():
     print(monster_donek)
 
     rooms.append(Room("A1", 0.10, 0, 0, 1))
-    rooms[-1].description = "your trip begin ! young travelers"
+
+    def list_of_welcome_message():
+        list_welcome_message = [
+            "your trip begin ! young travelers",
+            "bad choice it is very dangerous",
+            "probably many problems, too many ",
+            "you're scared very right ? ",
+            "Be brave even though you will probably die anyway",
+        ]
+
+        welcom_message = random.choice(list_welcome_message)
+
+        return welcom_message
+
+    first_welcome_message = list_of_welcome_message()
+
+    rooms[-1].description = f"{player.name }: {first_welcome_message} "
     rooms.append(Room("B1", 0.50, 0, 0, 1, [monster_donek]))
     rooms[-1].description = "room with fireplace"
     rooms.append(Room("B2", 0.50, 0, 0, 1))
